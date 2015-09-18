@@ -21,7 +21,68 @@ public class Java8Practice {
      */
     public static void main(String[] args) {
         Java8Practice j = new Java8Practice();
-        j.doAppleCompare();
+        //j.doAppleCompare();
+        
+        //doQuiz2_1();
+        doRunnables();
+    }
+    
+    private static void doQuiz2_1() {
+        prettyPrintApple(getSampleList(), new Printer1());
+        
+        ApplePrint printer2 = new ApplePrint() {
+            public String print(Apple apple) {
+                return apple.getWeight().toString();
+            }
+        };
+        prettyPrintApple(getSampleList(), printer2);
+        prettyPrintApple(getSampleList(), new ApplePrint() {
+            public String print(Apple apple) {
+                return apple.getColor() + " " + apple.getWeight();
+            }
+        });
+        
+        //now with a lambda
+        prettyPrintApple(getSampleList(), (Apple apple) -> apple.getWeight() + " " + apple.getColor());
+        prettyPrintApple(getSampleList(), (Apple apple) -> { return apple.getWeight() + " " + apple.getColor(); }); //same output as previous one
+        
+        //The following don't compile.  See quiz 3.1.
+        //prettyPrintApple(getSampleList(), (Apple apple) -> { apple.getWeight() + " " + apple.getColor()});  //does not compile
+        //prettyPrintApple(getSampleList(), (Apple apple) -> { apple.getWeight() + " " + apple.getColor(); });    //does not compile
+        //prettyPrintApple(getSampleList(), (Apple apple) -> return apple.getWeight() + " " + apple.getColor());  //does not compile
+    }
+    
+    private static class Printer1 implements ApplePrint {
+        public String print(Apple apple) {
+            return apple.getColor();
+        }
+    };
+    
+    public static List<Apple> getSampleList() {
+        List<Apple> bushel = new ArrayList<>();
+        bushel.add(new Apple("red", 4));
+        bushel.add(new Apple("red", 2));
+        bushel.add(new Apple("green", 6));
+        bushel.add(new Apple("yellow", 3));
+        
+        return bushel;
+    }
+    
+    public static void processRunnable(Runnable r) {
+        r.run();
+    }
+    
+    public static void doRunnables() {
+        Runnable r1 = new Runnable() {
+            public void run() {
+                System.out.println("Runnable 1");
+            }
+        };
+        Runnable r2 = () -> System.out.println("Runnable 2");
+        
+        processRunnable(r1);
+        processRunnable(r2);
+        processRunnable(() -> System.out.println("Runnable 3"));
     }
     
     public void doAppleCompare() {
@@ -85,5 +146,12 @@ public class Java8Practice {
             }
         }
         return result;
+    }
+    
+    public static void prettyPrintApple(List<Apple> inventory, ApplePrint printer) {
+        for(Apple apple : inventory) {
+            String output = printer.print(apple);
+            System.out.println(output);
+        }
     }
 }
