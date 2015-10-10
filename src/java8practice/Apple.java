@@ -6,6 +6,8 @@
 
 package java8practice;
 
+import java.util.function.Predicate;
+
 /**
  *
  * @author paul
@@ -38,4 +40,13 @@ public class Apple { //implements Comparable {
     public String toString() {
         return this.color + " " + this.weight;
     }
+    
+    /*Predicate<Apple> getPredicate() {
+        //return () -> false; //does not compile
+        return new Predicate<Apple>() {
+            public boolean test(Apple a) {
+                return false;
+            }
+        };
+    }*/
 }

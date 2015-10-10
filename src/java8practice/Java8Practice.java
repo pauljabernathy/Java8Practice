@@ -25,6 +25,9 @@ public class Java8Practice {
         
         //doQuiz2_1();
         doRunnables();
+        
+        //Apple a = () -> return new Apple("green");  does not compile
+        Predicate<Apple> p = (Apple a) -> false;
     }
     
     private static void doQuiz2_1() {
@@ -83,6 +86,16 @@ public class Java8Practice {
         processRunnable(r1);
         processRunnable(r2);
         processRunnable(() -> System.out.println("Runnable 3"));
+        processRunnable(() -> {});      //This compiles.  Runnable::run() takes nothing and returns void.  The {} in () -> {} are necessary.
+        processRunnable(() -> {
+            System.out.println("Where was runnable 4?  It was there, but had no output.");
+            System.out.println("Runnable 5");
+        });
+        
+        IntPredicate evens = (int i) -> i % 2 == 0;
+        Predicate<Integer> odds = (Integer i) -> i % 2 == 1;
+        assert(evens.test(2));
+        assert(odds.test(1));
     }
     
     public void doAppleCompare() {
