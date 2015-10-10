@@ -85,4 +85,5 @@ public class Lambdas {
         
         //System.out.println((apples.get(0)) -> getColor());  does not compile
     }
+    
 }
