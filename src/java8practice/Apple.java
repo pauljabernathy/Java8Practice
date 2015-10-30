@@ -16,6 +16,10 @@ public class Apple { //implements Comparable {
     private String color;
     private int weight;
     
+    public Apple(int weight) {
+        this("red", weight);
+    }
+    
     public Apple(String color, int weight) {
         this.color = color;
         this.weight = weight;

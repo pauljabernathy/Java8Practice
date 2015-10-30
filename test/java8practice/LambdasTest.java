@@ -5,6 +5,7 @@
  */
 package java8practice;
 
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,6 +14,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.List;
 
 /**
  *
@@ -54,4 +57,28 @@ public class LambdasTest {
         assertEquals(false, evens.test(1));
     }
     
+    @Test
+    public void getListOfApples() {
+        List<Integer> weights = Arrays.asList(1, 2, 3, 4);
+        List<Apple> apples = Lambdas.getListOfApples(weights, Apple::new);
+        assertEquals(4, apples.size());
+        System.out.println(apples);
+        //checkApples(1, apples.get(0).getWeight(), (int expected, int actual) -> assertEquals(expected, actual)); does not work with checkApples(int expected, int actual, BiFunction<Integer, Integer, Void>  test)
+        assertEquals(Integer.valueOf(1), apples.get(0).getWeight());
+        assertEquals(Integer.valueOf(2), apples.get(1).getWeight());
+        assertEquals(Integer.valueOf(3), apples.get(2).getWeight());
+        assertEquals(Integer.valueOf(4), apples.get(3).getWeight());
+        
+        assertEquals(true, checkApples(1, apples.get(0).getWeight(), (Integer exp, Integer actual) -> { return exp == actual; }));
+        //checkApples(1, apples.get(0).getWeight(), (Integer exp, Integer actual, Boolean.valueOf(true)) -> exp actual ))
+        checkApples((Integer exp, Integer actual) -> { return exp == actual; } );
+        BiFunction<Integer, Integer, Boolean>  test = (Integer exp, Integer actual) -> true;
+    }
+    
+    private boolean checkApples(BiFunction<Integer, Integer, Boolean>  test) {
+        return test.apply(1, 1);
+    }
+    private boolean checkApples(int expected, int actual, BiFunction<Integer, Integer, Boolean>  test) {
+        return test.apply(expected, actual);
+    }
 }
