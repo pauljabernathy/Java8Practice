@@ -84,4 +84,22 @@ public class FunctionsTest {
         assertEquals(0.33333333, Functions.integrate(f, 0.0, 1.0), epsilon);
     }
     
+    @Test
+    public void testDifferentiate() {
+        System.out.println("\ntesting differentiate");
+        
+        double epsilon = 0.01;
+        DoubleFunction<Double> f = x -> 5.0;
+        assertEquals(0.0, Functions.differentiate(f, 1.0), 0.0);
+        
+        f = x -> x;
+        assertEquals(1.0, Functions.differentiate(f, 1.0), epsilon);
+        
+        f = x -> x * x;
+        assertEquals(2.0, Functions.differentiate(f, 1.0), epsilon);
+        assertEquals(2.0, Functions.differentiate(x -> x * x, 1.0), epsilon);
+        
+        assertEquals(3.0, Functions.differentiate(x -> Math.pow(x, 3), 1.0), epsilon);
+    }
+    
 }

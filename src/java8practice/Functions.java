@@ -27,4 +27,12 @@ public class Functions {
         }
         return sum;
     }
+    
+    //yes, this is a very crude approximation and won't always work
+    public static double differentiate(DoubleFunction<Double> f, double x) {
+        double epsilon = .001;
+        double lower = f.apply(x - epsilon);
+        double upper = f.apply(x + epsilon);
+        return (upper - lower) / (2 * epsilon);
+    }
 }
