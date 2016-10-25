@@ -5,6 +5,7 @@
  */
 package java8practice.streams;
 
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.*;
 
@@ -84,4 +86,61 @@ public class StreamsTest {
         
     }
     
+    @Test
+    public void filterNumbers() {
+        List<Integer> nums = Arrays.asList(1, 2, 3, 3, 1, 2, 4);
+        assertEquals(7, nums.stream().count());
+        assertEquals(2, nums.stream().filter(i -> i % 2 == 0).distinct().count());
+        nums.stream().filter(i -> i % 2 == 0).distinct().forEach(n -> System.out.println(n));
+        nums.stream().filter(i -> i % 2 == 0).distinct().forEach(System.out::println);
+        int sum = 0;
+        //nums.stream().forEach(n -> sum += n); does not compile
+        
+        assertEquals(4, nums.stream().skip(3).count());
+        assertEquals(3, nums.stream().limit(3).count());
+    }
+    
+    @Test
+    public void mapping() {
+        List<Dish> menu = Streams.getMenu();
+        //print out each name
+        menu.stream().map(Dish::getName).forEach(System.out::println);
+        //menu.stream().forEach(dish -> System.out.println(dish.getName()));  //System.out.println(Dish::getName) isn't working, not sure why.
+        //The above two statements print out the same thing.
+        
+        //print out the length of each name
+        //menu.stream().map(dish -> dish.getName().length()).forEach(System.out::println);
+        //menu.stream().map(dish -> dish.getName()).map(String::length).forEach(System.out::println);  //You can chain .map() statements.
+        menu.stream().map(Dish::getName).map(String::length).forEach(System.out::println);
+        //The above three statements print out the same thing.
+        menu.stream().forEach(dish -> System.out.println(dish.getName() + " " + dish.getName().length()));
+        
+        //print out the list of distinct words
+        List<String> words = Arrays.asList("word1", "word2", "word1");
+        words.stream().distinct().forEach(System.out::println);
+        
+        //print out the list of distinct letters
+        words.stream().map(w -> w.split("")).flatMap(Arrays::stream).distinct().forEach(System.out::println);
+        assertEquals(6, words.stream().map(w -> w.split("")).flatMap(Arrays::stream).distinct().count());
+        //some wrong ways to do it
+        words.stream().map(w -> w.split("")).forEach(System.out::println);              //object hashes
+        System.out.println(words.stream().map(w -> w.split("")).count());               //3
+        System.out.println(words.stream().map(w -> w.split("")).distinct().count());    //3
+        System.out.println(words.stream().map(w -> w.split("")).map(Arrays::stream).distinct().count());//3
+    }
+    
+    @Test
+    public void sorting() {
+        List<String> words = new ArrayList<String>();
+        words.addAll(Arrays.asList("abc", "def", "aaa", "blob"));
+        //words.stream().sorted().forEach(System.out::println);
+        words.stream().sorted(new java.util.Comparator<String>() {
+            public int compare(String a, String b) {
+                return b.compareTo(a);
+            }
+        });//.forEach(System.out::println);
+        
+        words.stream().sorted((a, b) -> b.compareTo(a)).forEach(System.out::println);
+        words.stream().sorted((a, b) -> a.compareTo(b)).forEach(System.out::println);
+    }
 }
